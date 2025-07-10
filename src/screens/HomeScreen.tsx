@@ -4,8 +4,9 @@ import { useAppTheme } from "~/hooks/useAppTheme";
 import { useThemeContext } from "~/store";
 
 export default function HomeScreen() {
-  const { isDark, toggleTheme } = useThemeContext();
+  const { toggleTheme } = useThemeContext();
   const theme = useAppTheme();
+
   return (
     <View
       style={[styles.container, { backgroundColor: theme.colors.background }]}
@@ -18,6 +19,7 @@ export default function HomeScreen() {
           <Text variant="bodyMedium">This is a React Native Paper card.</Text>
         </Card.Content>
       </Card>
+
       <Button
         mode="contained"
         onPress={toggleTheme}

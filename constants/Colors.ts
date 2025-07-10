@@ -1,5 +1,11 @@
 // theme.ts
-import { MD3DarkTheme, MD3LightTheme } from "react-native-paper";
+import {
+  configureFonts,
+  DefaultTheme,
+  MD3DarkTheme,
+  MD3LightTheme,
+} from "react-native-paper";
+import { fontConfig } from "./FontsConfig";
 
 const tintColorLight = "#0a7ea4";
 const tintColorDark = "#fff";
@@ -15,6 +21,7 @@ export const lightTheme = {
     onSurface: "#11181C",
     outline: "#687076",
   },
+  fonts: configureFonts({ config: { ...DefaultTheme.fonts, ...fontConfig } }),
 };
 
 export const darkTheme = {
@@ -28,4 +35,5 @@ export const darkTheme = {
     onSurface: "#ECEDEE",
     outline: "#9BA1A6",
   },
+  fonts: configureFonts({ config: { ...DefaultTheme.fonts, ...fontConfig } }),
 };

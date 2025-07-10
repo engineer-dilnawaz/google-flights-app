@@ -16,10 +16,6 @@ export const fontConfig = {
       fontFamily: "Poppins-Thin",
       fontWeight: "normal",
     },
-    bold: {
-      fontFamily: "Poppins-Bold",
-      fontWeight: "bold",
-    },
   },
   ios: {
     regular: {
@@ -37,10 +33,6 @@ export const fontConfig = {
     thin: {
       fontFamily: "Poppins-Thin",
       fontWeight: "normal",
-    },
-    bold: {
-      fontFamily: "Poppins-Bold",
-      fontWeight: "bold",
     },
   },
   android: {
@@ -60,9 +52,5 @@ export const fontConfig = {
       fontFamily: "Poppins-Thin",
       fontWeight: "normal",
     },
-    bold: {
-      fontFamily: "Poppins-Bold",
-      fontWeight: "bold",
-    },
   },
-} as const;
+};
