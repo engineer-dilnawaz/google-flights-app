@@ -1,6 +1,9 @@
 import { useFonts } from "expo-font";
-import React from "react";
-import { Text, View } from "react-native";
+
+import { NavigationContainer } from "@react-navigation/native";
+import { Provider as PaperProvider } from "react-native-paper";
+import HomeScreen from "./screens/HomeScreen";
+import { ThemeProvider, useThemeContext } from "./store";
 
 const App = () => {
   const [loaded] = useFonts({
@@ -12,9 +15,21 @@ const App = () => {
     return null;
   }
   return (
-    <View>
-      <Text>App</Text>
-    </View>
+    <ThemeProvider>
+      <Main />
+    </ThemeProvider>
+  );
+};
+
+const Main = () => {
+  const { theme } = useThemeContext();
+
+  return (
+    <PaperProvider theme={theme}>
+      <NavigationContainer>
+        <HomeScreen />
+      </NavigationContainer>
+    </PaperProvider>
   );
 };
 
