@@ -16,14 +16,17 @@ interface LottieAnimationProps {
   loop?: boolean;
   style?: ViewStyle;
   resizeMode?: "cover" | "contain" | "center";
+  onFinish?: () => void;
 }
 
 export const LottieAnimation: React.FC<LottieAnimationProps> = ({
   source,
   autoPlay = true,
-  loop = true,
+  loop = false,
   style,
   resizeMode = "contain",
+  onFinish,
+  ...props
 }) => {
   return (
     <View style={[styles.container, style]}>
@@ -33,6 +36,8 @@ export const LottieAnimation: React.FC<LottieAnimationProps> = ({
         loop={loop}
         resizeMode={resizeMode}
         style={StyleSheet.absoluteFill}
+        onAnimationFinish={onFinish}
+        {...props}
       />
     </View>
   );

@@ -1,23 +1,12 @@
-import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Card, Surface, Text } from "react-native-paper";
-import {
-  Button as CustomButton,
-  TextInput as CustomTextInput,
-} from "~/components/ui";
+import { Button as CustomButton } from "~/components/ui";
 import { useAppTheme } from "~/hooks/useAppTheme";
 import { useThemeContext } from "~/store";
 
 export default function HomeScreen() {
   const { toggleTheme } = useThemeContext();
   const theme = useAppTheme();
-
-  // Input states
-  const [inputNormal, setInputNormal] = useState("");
-  const [inputSuccess, setInputSuccess] = useState("");
-  const [inputError, setInputError] = useState("");
-  const [inputWarning, setInputWarning] = useState("");
-  const [inputDisabled, setInputDisabled] = useState("");
 
   return (
     <View
@@ -144,63 +133,6 @@ export default function HomeScreen() {
         </View>
       </View>
 
-      {/* Custom TextInput Examples */}
-      <View style={styles.inputSection}>
-        <Text
-          variant="titleMedium"
-          style={[styles.sectionTitle, { color: theme.colors.onSurface }]}
-        >
-          Custom TextInput Examples
-        </Text>
-        <CustomTextInput
-          label="Normal"
-          value={inputNormal}
-          onChangeText={setInputNormal}
-          status="normal"
-          placeholder="Type here..."
-          iconLeft={(props) => <Text {...props}>🔍</Text>}
-          iconRight={(props) => <Text {...props}>➡️</Text>}
-          style={styles.input}
-        />
-        <CustomTextInput
-          label="Success"
-          value={inputSuccess}
-          onChangeText={setInputSuccess}
-          status="success"
-          placeholder="Type here..."
-          iconLeft={(props) => <Text {...props}>✅</Text>}
-          style={styles.input}
-        />
-        <CustomTextInput
-          label="Error"
-          value={inputError}
-          onChangeText={setInputError}
-          status="error"
-          placeholder="Type here..."
-          iconLeft={(props) => <Text {...props}>❌</Text>}
-          style={styles.input}
-        />
-        <CustomTextInput
-          label="Warning"
-          value={inputWarning}
-          onChangeText={setInputWarning}
-          status="warning"
-          placeholder="Type here..."
-          iconLeft={(props) => <Text {...props}>⚠️</Text>}
-          style={styles.input}
-        />
-        <CustomTextInput
-          label="Disabled"
-          value={inputDisabled}
-          onChangeText={setInputDisabled}
-          status="normal"
-          placeholder="Type here..."
-          iconLeft={(props) => <Text {...props}>🚫</Text>}
-          disabled
-          style={styles.input}
-        />
-      </View>
-
       <Button
         mode="contained"
         onPress={toggleTheme}
@@ -251,12 +183,6 @@ const styles = StyleSheet.create({
   },
   buttonSection: {
     marginVertical: 16,
-  },
-  inputSection: {
-    marginVertical: 16,
-  },
-  input: {
-    marginBottom: 12,
   },
   sectionTitle: {
     marginBottom: 12,
