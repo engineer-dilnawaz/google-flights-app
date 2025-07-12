@@ -10,6 +10,7 @@ import Snackbar from "~/src/components/ui/Snackbar";
 import TextInput from "~/src/components/ui/TextInput";
 import { useAuthNavigation } from "~/src/hooks";
 import { useLoginForm } from "~/src/hooks/auth/useLogInForm";
+import { useAuth } from "~/src/store";
 import { validateLoginForm } from "~/src/utils";
 
 const Login = () => {
@@ -17,8 +18,9 @@ const Login = () => {
   const navigation = useAuthNavigation();
   const { state, dispatch } = useLoginForm();
   const [showSnackbar, setShowSnackBar] = useState(false);
+  const { login } = useAuth();
 
-  const handleOnLoginPress = () => {
+  const handleOnLoginPress = async () => {
     const errors = validateLoginForm({
       emailOrPhone: state.emailOrPhone,
       password: state.password,
@@ -26,13 +28,26 @@ const Login = () => {
 
     if (Object.keys(errors).length > 0) {
       dispatch({ type: "SET_ERRORS", payload: errors });
+      dispatch({
+        type: "SET_MESSAGE",
+        payload: "Enter email/password to login.",
+      });
       setShowSnackBar(true);
       return;
     }
 
     dispatch({ type: "RESET_ERRORS" });
-    console.log("Login form valid:", state);
-    // TODO: Perform login logic here
+    const response = await login({
+      emailOrPhone: state.emailOrPhone,
+      password: state.password,
+    });
+    if (typeof response === "string") {
+      dispatch({
+        type: "SET_MESSAGE",
+        payload: "Valid credentials are required to proceed.",
+      });
+      setShowSnackBar(true);
+    }
   };
 
   const handleOnSignUpPress = () => {
@@ -55,6 +70,7 @@ const Login = () => {
             }
             error={!!state.errors?.emailOrPhone}
             errorMessage={state.errors?.emailOrPhone}
+            isEmail
           />
           <TextInput
             placeholder="Password"
@@ -78,6 +94,8 @@ const Login = () => {
           mode="contained"
           style={styles.button}
           onPress={handleOnLoginPress}
+          loading={state.loading}
+          disabled={state.loading}
         >
           Log in
         </Button>
@@ -87,14 +105,7 @@ const Login = () => {
         </View>
       </ScreenWrapper>
       {showSnackbar && (
-        <Snackbar
-          visible={showSnackbar}
-          message="Valid email/password is required to login."
-          onDismissSnackBar={() => {
-            console.log("dismissed");
-            setShowSnackBar(false);
-          }}
-        />
+        <Snackbar visible={showSnackbar} message={state.alertMessage} />
       )}
     </Fragment>
   );

@@ -8,6 +8,8 @@ type State = {
     emailOrPhone?: string;
     password?: string;
   };
+  loading: boolean;
+  alertMessage: string;
 };
 
 type Action =
@@ -16,13 +18,17 @@ type Action =
   | { type: "TOGGLE_PASSWORD_VISIBILITY" }
   | { type: "SET_ERRORS"; payload: State["errors"] }
   | { type: "RESET_ERRORS" }
-  | { type: "RESET_FORM" };
+  | { type: "RESET_FORM" }
+  | { type: "SET_LOADING" }
+  | { type: "SET_MESSAGE"; payload: string };
 
 const initialState: State = {
   emailOrPhone: "",
   password: "",
   showPassword: false,
   errors: {},
+  loading: false,
+  alertMessage: "",
 };
 
 function reducer(state: State, action: Action): State {
@@ -53,6 +59,12 @@ function reducer(state: State, action: Action): State {
 
     case "RESET_ERRORS":
       return { ...state, errors: {} };
+
+    case "SET_LOADING":
+      return { ...state, loading: !state.loading };
+
+    case "SET_MESSAGE":
+      return { ...state, alertMessage: action.payload };
 
     case "RESET_FORM":
       return initialState;

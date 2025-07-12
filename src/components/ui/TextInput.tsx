@@ -16,6 +16,7 @@ type TextInputProps = {
   togglePassword?: () => void;
   error?: boolean;
   errorMessage?: string;
+  isEmail?: boolean;
 };
 
 const TextInput = ({
@@ -27,6 +28,7 @@ const TextInput = ({
   togglePassword,
   error = false,
   errorMessage,
+  isEmail = false,
 }: TextInputProps) => {
   const styles = useStyles();
   const theme = useTheme();
@@ -43,6 +45,7 @@ const TextInput = ({
         activeOutlineColor={theme.colors.primary}
         placeholderTextColor={theme.colors.onSurfaceDisabled}
         secureTextEntry={secureTextEntry && !showPassword}
+        autoCapitalize={isEmail ? "none" : undefined}
         right={
           secureTextEntry ? (
             <PaperInput.Icon

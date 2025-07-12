@@ -2,7 +2,7 @@ import React from "react";
 import { Provider as PaperProvider } from "react-native-paper";
 
 import AppNavigator from "./navigation/main-navgiator";
-import { ThemeProvider, useThemeContext } from "./store";
+import { AuthProvider, ThemeProvider, useThemeContext } from "./store";
 
 const App = () => {
   return (
@@ -17,7 +17,9 @@ const Main = () => {
 
   return (
     <PaperProvider theme={theme}>
-      <AppNavigator />
+      <AuthProvider>
+        <AppNavigator />
+      </AuthProvider>
     </PaperProvider>
   );
 };

@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import HomeScreen from "~/src/screens/Main/HomeScreen";
 import ResultsScreen from "~/src/screens/Main/ResultsScreen";
+import BottomTab from "../bottom-tab/bottom-tab";
 
 export type RootStackParamList = {
   home: undefined;
@@ -15,13 +15,17 @@ export type RootStackParamList = {
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-const AuthStack = () => {
+const MainStack = () => {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="home" component={HomeScreen} />
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name="home" component={BottomTab} />
       <Stack.Screen name="result" component={ResultsScreen} />
     </Stack.Navigator>
   );
 };
 
-export default AuthStack;
+export default MainStack;

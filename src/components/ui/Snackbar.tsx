@@ -10,7 +10,7 @@ type SnackbarProps = {
     onPress: () => void;
   };
   duration?: number;
-  onDismissSnackBar: () => void;
+  onDismissSnackBar?: () => void;
 };
 
 const Snackbar = ({
@@ -18,7 +18,7 @@ const Snackbar = ({
   message,
   action,
   duration = 5000,
-  onDismissSnackBar,
+  onDismissSnackBar = () => {},
 }: SnackbarProps) => {
   const styles = useStyles();
   const theme = useTheme();

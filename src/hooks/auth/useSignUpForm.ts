@@ -12,6 +12,9 @@ type State = {
     password?: string;
     termsAccepted?: string;
   };
+  isLoading: boolean;
+  showSnackbar: boolean;
+  snackbarMessage: string;
 };
 
 type Action =
@@ -22,7 +25,11 @@ type Action =
   | { type: "TOGGLE_TERMS" }
   | { type: "SET_ERRORS"; payload: State["errors"] }
   | { type: "RESET_ERRORS" }
-  | { type: "RESET_FORM" };
+  | { type: "SET_LOADING" }
+  | { type: "RESET_LOADING" }
+  | { type: "RESET_FORM" }
+  | { type: "SET_SNACK_BAR"; payload: string }
+  | { type: "RESET_SNACK_BAR" };
 
 const initialState: State = {
   name: "",
@@ -31,6 +38,9 @@ const initialState: State = {
   showPassword: false,
   termsAccepted: false,
   errors: {},
+  isLoading: false,
+  showSnackbar: false,
+  snackbarMessage: "",
 };
 
 function reducer(state: State, action: Action): State {
@@ -81,8 +91,20 @@ function reducer(state: State, action: Action): State {
       console.log("Resetting Error!");
       return { ...state, errors: {} };
 
+    case "SET_LOADING":
+      return { ...state, isLoading: true };
+
+    case "RESET_LOADING":
+      return { ...state, isLoading: false };
+
     case "RESET_FORM":
       return initialState;
+
+    case "SET_SNACK_BAR":
+      return { ...state, showSnackbar: true, snackbarMessage: action.payload };
+
+    case "RESET_SNACK_BAR":
+      return { ...state, showSnackbar: false, snackbarMessage: "" };
 
     default:
       return state;

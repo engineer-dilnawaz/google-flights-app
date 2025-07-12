@@ -3,6 +3,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  StatusBar,
   StyleProp,
   StyleSheet,
   View,
@@ -17,6 +18,7 @@ type ScreenWrapperProps = PropsWithChildren & {
 
 const ScreenWrapper = ({ children, style }: ScreenWrapperProps) => {
   const styles = useStyles();
+  const theme = useTheme();
   return (
     <SafeAreaView style={styles.container} edges={["top", "bottom"]}>
       <KeyboardAvoidingView
@@ -32,6 +34,7 @@ const ScreenWrapper = ({ children, style }: ScreenWrapperProps) => {
           <View style={[styles.container, style]}>{children}</View>
         </ScrollView>
       </KeyboardAvoidingView>
+      <StatusBar animated barStyle="default" showHideTransition={"slide"} />
     </SafeAreaView>
   );
 };
