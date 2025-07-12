@@ -1,49 +1,32 @@
 import { useReducer } from "react";
 
 type State = {
-  name: string;
   emailOrPhone: string;
   password: string;
   showPassword: boolean;
-  termsAccepted: boolean;
   errors: {
-    name?: string;
     emailOrPhone?: string;
     password?: string;
-    termsAccepted?: string;
   };
 };
 
 type Action =
-  | { type: "SET_NAME"; payload: string }
   | { type: "SET_EMAIL_OR_PHONE"; payload: string }
   | { type: "SET_PASSWORD"; payload: string }
   | { type: "TOGGLE_PASSWORD_VISIBILITY" }
-  | { type: "TOGGLE_TERMS" }
   | { type: "SET_ERRORS"; payload: State["errors"] }
   | { type: "RESET_ERRORS" }
   | { type: "RESET_FORM" };
 
 const initialState: State = {
-  name: "",
   emailOrPhone: "",
   password: "",
   showPassword: false,
-  termsAccepted: false,
   errors: {},
 };
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
-    case "SET_NAME": {
-      const { name, ...restErrors } = state.errors;
-      return {
-        ...state,
-        name: action.payload,
-        errors: restErrors,
-      };
-    }
-
     case "SET_EMAIL_OR_PHONE": {
       const { emailOrPhone, ...restErrors } = state.errors;
       return {
@@ -65,20 +48,10 @@ function reducer(state: State, action: Action): State {
     case "TOGGLE_PASSWORD_VISIBILITY":
       return { ...state, showPassword: !state.showPassword };
 
-    case "TOGGLE_TERMS": {
-      const { termsAccepted, ...restErrors } = state.errors;
-      return {
-        ...state,
-        termsAccepted: !state.termsAccepted,
-        errors: restErrors,
-      };
-    }
-
     case "SET_ERRORS":
       return { ...state, errors: action.payload };
 
     case "RESET_ERRORS":
-      console.log("Resetting Error!");
       return { ...state, errors: {} };
 
     case "RESET_FORM":
@@ -89,7 +62,7 @@ function reducer(state: State, action: Action): State {
   }
 }
 
-export const useSignUpForm = () => {
+export const useLoginForm = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   return { state, dispatch };

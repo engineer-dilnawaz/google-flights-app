@@ -1,7 +1,15 @@
 import { PropsWithChildren } from "react";
-import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleProp,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from "react-native";
 import { useTheme } from "react-native-paper";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type ScreenWrapperProps = PropsWithChildren & {
   style?: StyleProp<ViewStyle>;
@@ -9,21 +17,39 @@ type ScreenWrapperProps = PropsWithChildren & {
 
 const ScreenWrapper = ({ children, style }: ScreenWrapperProps) => {
   const styles = useStyles();
-
-  return <View style={[styles.container, style]}>{children}</View>;
+  return (
+    <SafeAreaView style={styles.container} edges={["top", "bottom"]}>
+      <KeyboardAvoidingView
+        style={styles.flex}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+      >
+        <ScrollView
+          style={styles.flex}
+          contentContainerStyle={styles.flexGrow}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={[styles.container, style]}>{children}</View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+  );
 };
 
+export default ScreenWrapper;
+
 const useStyles = () => {
-  const insets = useSafeAreaInsets();
   const theme = useTheme();
   return StyleSheet.create({
     container: {
       flex: 1,
-      paddingTop: insets.top,
-      paddingBottom: insets.bottom,
       backgroundColor: theme.colors.background,
+    },
+    flex: {
+      flex: 1,
+    },
+    flexGrow: {
+      flexGrow: 1,
     },
   });
 };
-
-export default ScreenWrapper;

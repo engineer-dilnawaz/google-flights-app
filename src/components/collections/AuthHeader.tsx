@@ -2,8 +2,8 @@ import { Fragment } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import { spacing } from "~/constants/design";
-import DividerLine from "./DividerLine";
-import SocialIconButton from "./SocialIconButton";
+import DividerLine from "../ui/DividerLine";
+import SocialIconButton from "../ui/SocialIconButton";
 
 type AuthHeaderProps = {
   onFBPress?: () => void;

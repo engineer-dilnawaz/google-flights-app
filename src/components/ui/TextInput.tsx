@@ -1,5 +1,9 @@
-import { StyleSheet } from "react-native";
-import { TextInput as PaperInput, useTheme } from "react-native-paper";
+import { StyleSheet, View } from "react-native";
+import {
+  HelperText,
+  TextInput as PaperInput,
+  useTheme,
+} from "react-native-paper";
 import { radius } from "~/constants/design";
 import Icon from "./Icon";
 
@@ -10,6 +14,8 @@ type TextInputProps = {
   secureTextEntry?: boolean;
   showPassword?: boolean;
   togglePassword?: () => void;
+  error?: boolean;
+  errorMessage?: string;
 };
 
 const TextInput = ({
@@ -19,37 +25,46 @@ const TextInput = ({
   secureTextEntry = false,
   showPassword = false,
   togglePassword,
+  error = false,
+  errorMessage,
 }: TextInputProps) => {
   const styles = useStyles();
   const theme = useTheme();
 
   return (
-    <PaperInput
-      mode="outlined"
-      placeholder={placeholder}
-      value={value}
-      onChangeText={onChangeText}
-      style={styles.textInput}
-      outlineStyle={styles.outline}
-      activeOutlineColor={theme.colors.primary}
-      placeholderTextColor={theme.colors.onSurfaceDisabled}
-      secureTextEntry={secureTextEntry && !showPassword}
-      right={
-        secureTextEntry ? (
-          <PaperInput.Icon
-            onPress={togglePassword}
-            icon={(props) => (
-              <Icon
-                type="Feather"
-                name={showPassword ? "eye-off" : "eye"}
-                color={props.color}
-                size={props.size}
-              />
-            )}
-          />
-        ) : null
-      }
-    />
+    <View>
+      <PaperInput
+        mode="outlined"
+        placeholder={placeholder}
+        value={value}
+        onChangeText={onChangeText}
+        style={styles.textInput}
+        outlineStyle={styles.outline}
+        activeOutlineColor={theme.colors.primary}
+        placeholderTextColor={theme.colors.onSurfaceDisabled}
+        secureTextEntry={secureTextEntry && !showPassword}
+        right={
+          secureTextEntry ? (
+            <PaperInput.Icon
+              onPress={togglePassword}
+              icon={(props) => (
+                <Icon
+                  type="Feather"
+                  name={showPassword ? "eye-off" : "eye"}
+                  color={props.color}
+                  size={props.size}
+                />
+              )}
+            />
+          ) : null
+        }
+      />
+      {error && (
+        <HelperText type="error" visible={error} padding="normal">
+          {errorMessage}
+        </HelperText>
+      )}
+    </View>
   );
 };
 

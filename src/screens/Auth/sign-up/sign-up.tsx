@@ -1,12 +1,14 @@
 import { StyleSheet, View } from "react-native";
 import { Button, Text, useTheme } from "react-native-paper";
 import { radius, spacing } from "~/constants/design";
-import AuthHeader from "~/src/components/ui/AuthHeader";
+import AuthHeader from "~/src/components/collections/AuthHeader";
+
 import LinkText from "~/src/components/ui/LinkText";
 import PrivacyCheckbox from "~/src/components/ui/PrivacyCheckbox";
 import ScreenWrapper from "~/src/components/ui/ScreenWrapper";
 import TextInput from "~/src/components/ui/TextInput";
 import { useAuthNavigation, useSignUpForm } from "~/src/hooks";
+import { validateSignUpForm } from "~/src/utils";
 
 const SignUp = () => {
   const navigation = useAuthNavigation();
@@ -18,7 +20,21 @@ const SignUp = () => {
   };
 
   const handleOnCreateAccountPress = () => {
-    console.log(state);
+    const errors = validateSignUpForm({
+      name: state.name,
+      emailOrPhone: state.emailOrPhone,
+      password: state.password,
+      termsAccepted: state.termsAccepted,
+    });
+    if (Object.keys(errors).length > 0) {
+      dispatch({ type: "SET_ERRORS", payload: errors });
+      return;
+    }
+
+    dispatch({ type: "RESET_ERRORS" });
+
+    // Proceed with API call or navigation
+    console.log("Form Submitted:", state);
   };
 
   return (
@@ -33,6 +49,8 @@ const SignUp = () => {
           placeholder="Name"
           value={state.name}
           onChangeText={(text) => dispatch({ type: "SET_NAME", payload: text })}
+          error={!!state.errors?.name}
+          errorMessage={state.errors?.name}
         />
         <TextInput
           placeholder="Email/Phone number"
@@ -40,10 +58,12 @@ const SignUp = () => {
           onChangeText={(text) =>
             dispatch({ type: "SET_EMAIL_OR_PHONE", payload: text })
           }
+          error={!!state.errors?.emailOrPhone}
+          errorMessage={state.errors?.emailOrPhone}
         />
         <TextInput
           placeholder="Password"
-          secureTextEntry={!state.showPassword}
+          secureTextEntry
           showPassword={state.showPassword}
           togglePassword={() =>
             dispatch({ type: "TOGGLE_PASSWORD_VISIBILITY" })
@@ -52,12 +72,16 @@ const SignUp = () => {
           onChangeText={(text) =>
             dispatch({ type: "SET_PASSWORD", payload: text })
           }
+          error={!!state.errors?.password}
+          errorMessage={state.errors?.password}
         />
       </View>
 
       <PrivacyCheckbox
         status={state.termsAccepted}
         onPress={() => dispatch({ type: "TOGGLE_TERMS" })}
+        error={!!state.errors?.termsAccepted}
+        errorMessage={state.errors?.termsAccepted}
       />
 
       <Button

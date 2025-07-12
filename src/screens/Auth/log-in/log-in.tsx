@@ -1,47 +1,102 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Text, useTheme } from "react-native-paper";
 import { radius, spacing } from "~/constants/design";
-import AuthHeader from "~/src/components/ui/AuthHeader";
+import AuthHeader from "~/src/components/collections/AuthHeader";
+
 import LinkText from "~/src/components/ui/LinkText";
 import ScreenWrapper from "~/src/components/ui/ScreenWrapper";
+import Snackbar from "~/src/components/ui/Snackbar";
 import TextInput from "~/src/components/ui/TextInput";
 import { useAuthNavigation } from "~/src/hooks";
+import { useLoginForm } from "~/src/hooks/auth/useLogInForm";
+import { validateLoginForm } from "~/src/utils";
 
 const Login = () => {
   const styles = useStyles();
-  const [showPassword, setShowPassword] = useState(false);
   const navigation = useAuthNavigation();
+  const { state, dispatch } = useLoginForm();
+  const [showSnackbar, setShowSnackBar] = useState(false);
+
+  const handleOnLoginPress = () => {
+    const errors = validateLoginForm({
+      emailOrPhone: state.emailOrPhone,
+      password: state.password,
+    });
+
+    if (Object.keys(errors).length > 0) {
+      dispatch({ type: "SET_ERRORS", payload: errors });
+      setShowSnackBar(true);
+      return;
+    }
+
+    dispatch({ type: "RESET_ERRORS" });
+    console.log("Login form valid:", state);
+    // TODO: Perform login logic here
+  };
 
   const handleOnSignUpPress = () => {
     navigation.navigate("sign-up");
   };
+
   return (
-    <ScreenWrapper style={styles.container}>
-      <AuthHeader
-        title="Sign In"
-        subTitle="Log in to manage your bookings and get personalized travel updates."
-      />
-      <View style={styles.formContainer}>
-        <TextInput placeholder="Email/Phone number" />
-        <TextInput
-          placeholder="Password"
-          secureTextEntry
-          showPassword={showPassword}
-          togglePassword={() => setShowPassword((pre) => !pre)}
+    <Fragment>
+      <ScreenWrapper style={styles.container}>
+        <AuthHeader
+          title="Sign In"
+          subTitle="Log in to manage your bookings and get personalized travel updates."
         />
-        <Text variant="labelLarge" style={styles.forgotPwd}>
-          Forgot Password?
-        </Text>
-      </View>
-      <Button mode="contained" style={styles.button}>
-        Log in
-      </Button>
-      <View style={styles.footerNote}>
-        <Text variant="bodyMedium">Don't you have an account?</Text>
-        <LinkText text="Sign Up" onPress={handleOnSignUpPress} />
-      </View>
-    </ScreenWrapper>
+        <View style={styles.formContainer}>
+          <TextInput
+            placeholder="Email/Phone number"
+            value={state.emailOrPhone}
+            onChangeText={(text) =>
+              dispatch({ type: "SET_EMAIL_OR_PHONE", payload: text })
+            }
+            error={!!state.errors?.emailOrPhone}
+            errorMessage={state.errors?.emailOrPhone}
+          />
+          <TextInput
+            placeholder="Password"
+            secureTextEntry
+            showPassword={state.showPassword}
+            togglePassword={() =>
+              dispatch({ type: "TOGGLE_PASSWORD_VISIBILITY" })
+            }
+            value={state.password}
+            onChangeText={(text) =>
+              dispatch({ type: "SET_PASSWORD", payload: text })
+            }
+            error={!!state.errors.password}
+            errorMessage={state.errors.password}
+          />
+          <Text variant="labelLarge" style={styles.forgotPwd}>
+            Forgot Password?
+          </Text>
+        </View>
+        <Button
+          mode="contained"
+          style={styles.button}
+          onPress={handleOnLoginPress}
+        >
+          Log in
+        </Button>
+        <View style={styles.footerNote}>
+          <Text variant="bodyMedium">Don't you have an account?</Text>
+          <LinkText text="Sign Up" onPress={handleOnSignUpPress} />
+        </View>
+      </ScreenWrapper>
+      {showSnackbar && (
+        <Snackbar
+          visible={showSnackbar}
+          message="Valid email/password is required to login."
+          onDismissSnackBar={() => {
+            console.log("dismissed");
+            setShowSnackBar(false);
+          }}
+        />
+      )}
+    </Fragment>
   );
 };
 
