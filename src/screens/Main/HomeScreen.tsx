@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Text, useTheme } from "react-native-paper";
-import { useThemeContext } from "../store";
+import { useThemeContext } from "../../store";
 
 const HomeScreen = () => {
   const { toggleTheme } = useThemeContext();

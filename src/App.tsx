@@ -1,8 +1,7 @@
-import { NavigationContainer } from "@react-navigation/native";
 import React from "react";
 import { Provider as PaperProvider } from "react-native-paper";
 
-import HomeScreen from "./screens/HomeScreen";
+import AppNavigator from "./navigation/main-navgiator";
 import { ThemeProvider, useThemeContext } from "./store";
 
 const App = () => {
@@ -18,9 +17,7 @@ const Main = () => {
 
   return (
     <PaperProvider theme={theme}>
-      <NavigationContainer>
-        <HomeScreen />
-      </NavigationContainer>
+      <AppNavigator />
     </PaperProvider>
   );
 };
