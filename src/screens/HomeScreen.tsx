@@ -1,277 +1,32 @@
-import React, { useState } from "react";
+import React from "react";
 import { StyleSheet, View } from "react-native";
-import { Button, Card, Surface, Text } from "react-native-paper";
-import {
-  Button as CustomButton,
-  TextInput as CustomTextInput,
-} from "~/components/ui";
-import { useAppTheme } from "~/hooks/useAppTheme";
-import { useThemeContext } from "~/store";
+import { Button, Text, useTheme } from "react-native-paper";
+import { useThemeContext } from "../store";
 
-export default function HomeScreen() {
+const HomeScreen = () => {
   const { toggleTheme } = useThemeContext();
-  const theme = useAppTheme();
-
-  // Input states
-  const [inputNormal, setInputNormal] = useState("");
-  const [inputSuccess, setInputSuccess] = useState("");
-  const [inputError, setInputError] = useState("");
-  const [inputWarning, setInputWarning] = useState("");
-  const [inputDisabled, setInputDisabled] = useState("");
-
+  const theme = useTheme();
   return (
     <View
       style={[styles.container, { backgroundColor: theme.colors.background }]}
     >
-      <Card
-        style={[
-          styles.card,
-          { backgroundColor: theme.colors.surfaceContainer },
-        ]}
-      >
-        <Card.Content>
-          <Text
-            variant="titleLarge"
-            style={{ color: theme.colors.onSurfaceContainer }}
-          >
-            Welcome to Your App
-          </Text>
-          <Text
-            variant="bodyMedium"
-            style={{ color: theme.colors.onSurfaceVariant }}
-          >
-            This card uses semantic colors that adapt to light/dark mode.
-          </Text>
-        </Card.Content>
-      </Card>
-
-      <Surface
-        style={[
-          styles.accentCard,
-          { backgroundColor: theme.colors.accent.blue },
-        ]}
-        elevation={2}
-      >
-        <Text style={[styles.accentText, { color: theme.colors.onPrimary }]}>
-          Custom Accent Color
-        </Text>
-      </Surface>
-
-      <View style={styles.colorGrid}>
-        <View
-          style={[
-            styles.colorSwatch,
-            { backgroundColor: theme.colors.custom.blueLight[400] },
-          ]}
-        />
-        <View
-          style={[
-            styles.colorSwatch,
-            { backgroundColor: theme.colors.custom.purple[400] },
-          ]}
-        />
-        <View
-          style={[
-            styles.colorSwatch,
-            { backgroundColor: theme.colors.custom.mint[400] },
-          ]}
-        />
-        <View
-          style={[
-            styles.colorSwatch,
-            { backgroundColor: theme.colors.custom.pink[400] },
-          ]}
-        />
-      </View>
-
-      {/* Custom Button Examples */}
-      <View style={styles.buttonSection}>
-        <Text
-          variant="titleMedium"
-          style={[styles.sectionTitle, { color: theme.colors.onSurface }]}
-        >
-          Custom Button Examples
-        </Text>
-
-        <View style={styles.buttonRow}>
-          <CustomButton
-            title="Default"
-            onPress={toggleTheme}
-            variant="default"
-            size="medium"
-          />
-          <CustomButton
-            title="Rounded"
-            onPress={toggleTheme}
-            variant="rounded"
-            size="medium"
-          />
-        </View>
-
-        <View style={styles.buttonRow}>
-          <CustomButton
-            title="Outline"
-            onPress={toggleTheme}
-            variant="outline"
-            size="medium"
-          />
-          <CustomButton
-            title="Rounded Outline"
-            onPress={toggleTheme}
-            variant="roundedOutline"
-            size="medium"
-          />
-        </View>
-
-        <View style={styles.buttonRow}>
-          <CustomButton
-            // loading
-            title="Big"
-            onPress={toggleTheme}
-            variant="default"
-            size="big"
-            icon={<Text style={{ color: "inherit", fontSize: 18 }}>🚀</Text>}
-            iconPosition="left"
-          />
-          <CustomButton
-            title="Small"
-            onPress={toggleTheme}
-            variant="outline"
-            size="small"
-            icon={<Text style={{ color: "inherit", fontSize: 14 }}>⭐</Text>}
-            iconPosition="right"
-          />
-        </View>
-      </View>
-
-      {/* Custom TextInput Examples */}
-      <View style={styles.inputSection}>
-        <Text
-          variant="titleMedium"
-          style={[styles.sectionTitle, { color: theme.colors.onSurface }]}
-        >
-          Custom TextInput Examples
-        </Text>
-        <CustomTextInput
-          label="Normal"
-          value={inputNormal}
-          onChangeText={setInputNormal}
-          status="normal"
-          placeholder="Type here..."
-          iconLeft={(props) => <Text {...props}>🔍</Text>}
-          iconRight={(props) => <Text {...props}>➡️</Text>}
-          style={styles.input}
-        />
-        <CustomTextInput
-          label="Success"
-          value={inputSuccess}
-          onChangeText={setInputSuccess}
-          status="success"
-          placeholder="Type here..."
-          iconLeft={(props) => <Text {...props}>✅</Text>}
-          style={styles.input}
-        />
-        <CustomTextInput
-          label="Error"
-          value={inputError}
-          onChangeText={setInputError}
-          status="error"
-          placeholder="Type here..."
-          iconLeft={(props) => <Text {...props}>❌</Text>}
-          style={styles.input}
-        />
-        <CustomTextInput
-          label="Warning"
-          value={inputWarning}
-          onChangeText={setInputWarning}
-          status="warning"
-          placeholder="Type here..."
-          iconLeft={(props) => <Text {...props}>⚠️</Text>}
-          style={styles.input}
-        />
-        <CustomTextInput
-          label="Disabled"
-          value={inputDisabled}
-          onChangeText={setInputDisabled}
-          status="normal"
-          placeholder="Type here..."
-          iconLeft={(props) => <Text {...props}>🚫</Text>}
-          disabled
-          style={styles.input}
-        />
-      </View>
-
-      <Button
-        mode="contained"
-        onPress={toggleTheme}
-        style={{ backgroundColor: theme.colors.primary }}
-        textColor={theme.colors.onPrimary}
-      >
+      <Text variant="titleLarge" style={{ color: theme.colors.primary }}>
+        Hello, Theme!
+      </Text>
+      <Button mode="contained" onPress={toggleTheme}>
         Toggle Theme
       </Button>
-
-      <Text
-        variant="bodySmall"
-        style={[styles.footer, { color: theme.colors.onSurfaceVariant }]}
-      >
-        Current theme: {theme.dark ? "Dark" : "Light"}
-      </Text>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    padding: 16,
-    gap: 16,
-  },
-  card: {
-    marginBottom: 8,
-  },
-  accentCard: {
-    padding: 16,
-    borderRadius: 12,
     alignItems: "center",
-  },
-  accentText: {
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  colorGrid: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginVertical: 16,
-  },
-  colorSwatch: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-  },
-  buttonSection: {
-    marginVertical: 16,
-  },
-  inputSection: {
-    marginVertical: 16,
-  },
-  input: {
-    marginBottom: 12,
-  },
-  sectionTitle: {
-    marginBottom: 12,
-    fontWeight: "600",
-    textAlign: "center",
-  },
-  buttonRow: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-    marginBottom: 12,
-    gap: 12,
-  },
-  footer: {
-    textAlign: "center",
-    marginTop: 8,
+    padding: 16,
   },
 });
+
+export default HomeScreen;
