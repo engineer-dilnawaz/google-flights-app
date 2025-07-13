@@ -13,8 +13,6 @@ import ActivityIndicator from "../ui/ActivityIndicator";
 const FlightsList = () => {
   const { data, loading, error } = useFlightSearchStore();
 
-  console.log(data);
-
   if (loading) return <ActivityIndicator text="Fetching Flights..." />;
   if (error)
     return <Text variant="labelSmall">{JSON.stringify(error, null, 2)}</Text>;

@@ -8,6 +8,7 @@ import {
 import {
   getUserFromStorage,
   removeUserFromStorage,
+  saveUserToStorage,
   StoredUser,
 } from "~/src/utils/authStorage";
 
@@ -15,6 +16,7 @@ type AuthContextType = {
   user: StoredUser | null;
   isLoggedIn: boolean;
   login: (user: Omit<StoredUser, "name">) => Promise<void | string>;
+  signUp: (user: StoredUser) => Promise<void>;
   logout: () => Promise<void>;
   deleteAccount: () => Promise<void>;
   isLoading: boolean;
@@ -29,6 +31,7 @@ const AuthContext = createContext<AuthContextType>({
   deleteAccount: async () => {},
   isLoading: true,
   handleSwitchStack: () => {},
+  signUp: async () => {},
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -67,6 +70,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const signUp = async (user: StoredUser) => {
+    try {
+      const newUserObj = {
+        name: user.name,
+        emailOrPhone: user.emailOrPhone,
+        password: user.password,
+      };
+      await saveUserToStorage(newUserObj);
+      setUser(newUserObj);
+      setIsLoggedIn(true);
+    } catch (error) {}
+  };
+
   const logout = async () => {
     setIsLoggedIn(false);
   };
@@ -89,6 +105,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         deleteAccount,
         isLoading,
         handleSwitchStack,
+        signUp,
       }}
     >
       {children}

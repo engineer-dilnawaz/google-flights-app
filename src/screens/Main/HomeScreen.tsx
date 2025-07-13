@@ -207,7 +207,8 @@ const HomeScreen = () => {
               />
               <IconText
                 label={
-                  cabinOptions.filter((cb) => cb.value === cabinClass)[0].label
+                  cabinOptions.filter((cb) => cb.value === cabinClass)[0]
+                    ?.label ?? cabinClass
                 }
                 icon="chevron-down"
               />

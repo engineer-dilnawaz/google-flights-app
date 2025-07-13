@@ -1,12 +1,15 @@
-import { StyleSheet, Text } from "react-native";
-import { useTheme } from "react-native-paper";
+import { StyleSheet } from "react-native";
+import { Text, useTheme } from "react-native-paper";
 import ScreenWrapper from "~/src/components/ui/ScreenWrapper";
 
 const FavourtieScreen = () => {
   const styles = useStyles();
+  const theme = useTheme();
   return (
     <ScreenWrapper style={[styles.container]}>
-      <Text>Favourtie Screen</Text>
+      <Text variant="headlineSmall" style={{ textAlign: "center" }}>
+        Your bookmarked flights would appear here
+      </Text>
     </ScreenWrapper>
   );
 };

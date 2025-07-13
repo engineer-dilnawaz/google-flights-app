@@ -46,7 +46,7 @@ export const usePlacesStore = create<PlacesState>((set, get) => ({
     endDate: undefined,
   },
 
-  cabinClass: "Economy",
+  cabinClass: "economy",
   adults: 1,
   children: 0,
   childrenAges: [],

@@ -10,11 +10,13 @@ import ScreenWrapper from "~/src/components/ui/ScreenWrapper";
 import Snackbar from "~/src/components/ui/Snackbar";
 import TextInput from "~/src/components/ui/TextInput";
 import { useAuthNavigation, useSignUpForm } from "~/src/hooks";
-import { saveUserToStorage, validateSignUpForm } from "~/src/utils";
+import { useAuth } from "~/src/store";
+import { validateSignUpForm } from "~/src/utils";
 
 const SignUp = () => {
   const navigation = useAuthNavigation();
   const { state, dispatch } = useSignUpForm();
+  const { signUp } = useAuth();
   const styles = useStyles();
 
   const handleOnSignInPress = () => {
@@ -38,7 +40,7 @@ const SignUp = () => {
     dispatch({ type: "SET_LOADING" });
 
     try {
-      await saveUserToStorage({
+      await signUp({
         name: state.name,
         emailOrPhone: state.emailOrPhone,
         password: state.password,
@@ -46,8 +48,6 @@ const SignUp = () => {
 
       dispatch({ type: "RESET_ERRORS" });
       dispatch({ type: "RESET_FORM" });
-
-      // Navigate to success or login screen
     } catch (error) {
       dispatch({
         type: "SET_SNACK_BAR",

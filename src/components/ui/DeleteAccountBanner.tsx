@@ -1,5 +1,6 @@
 import { Dispatch } from "react";
 import { Banner, useTheme } from "react-native-paper";
+import { useAuth } from "~/src/store";
 import Icon from "./Icon";
 
 type DeleteAccountBannerProps = {
@@ -12,8 +13,11 @@ const DeleteAccountBanner = ({
   setVisible,
 }: DeleteAccountBannerProps) => {
   const theme = useTheme();
+  const { deleteAccount } = useAuth();
 
-  const handleDelete = async () => {};
+  const handleDelete = async () => {
+    await deleteAccount();
+  };
 
   return (
     <Banner

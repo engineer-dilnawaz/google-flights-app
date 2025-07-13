@@ -113,10 +113,7 @@ const Travllers = ({ onDone }: TravllersProps) => {
           <Text variant="titleMedium">Cabin class</Text>
           <Dropdown
             mode={"outlined"}
-            value={
-              cabinOptions.filter((cb) => cb.value === state.cabinClass)[0]
-                .label
-            }
+            value={state.cabinClass}
             onSelect={(value) =>
               value && dispatch({ type: "SET_CABIN_CLASS", payload: value })
             }
