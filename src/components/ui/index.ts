@@ -1,3 +1,4 @@
+export * from "./ActivityIndicator";
 export * from "./CityInput";
 export * from "./CounterButtons";
 export * from "./DateInput";

@@ -2,17 +2,17 @@ import React, { Fragment } from "react";
 import { StyleSheet, View } from "react-native";
 import { TextInput, useTheme } from "react-native-paper";
 import { radius, spacing } from "~/constants/design";
-import { PlaceType } from "~/src/types/place";
+import { PlaceItem } from "~/src/types/place";
 import { HPX } from "~/src/utils";
 import SectionList from "../ui/SectionList";
 
 type ToFromProps = {
   searchedValue: string;
   setSearchedValue: (text: string) => void;
-  currentLocationList: PlaceType[];
-  recentPlacesList: PlaceType[];
-  suggestedPlacesList: PlaceType[];
-  handleSelect: (item: PlaceType) => void;
+  currentLocationList: PlaceItem[];
+  recentPlacesList: PlaceItem[];
+  suggestedPlacesList: PlaceItem[];
+  handleSelect: (item: PlaceItem) => void;
 };
 
 const ToFrom = ({
@@ -45,7 +45,7 @@ const ToFrom = ({
           label="Current Location"
           list={currentLocationList}
           onPress={handleSelect}
-          icon="history"
+          icon="crosshairs-gps"
           showList={!searchedValue}
         />
 

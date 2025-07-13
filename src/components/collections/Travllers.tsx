@@ -211,7 +211,7 @@ const Travllers = ({ onDone }: TravllersProps) => {
         <Button
           mode="contained"
           style={styles.button}
-          textColor={theme.colors.onPrimaryContainer}
+          // textColor={theme.colors.primary}
           onPress={handleDone}
         >
           Done
@@ -251,7 +251,7 @@ const useStyles = () => {
       height: HPX(20),
     },
     button: {
-      backgroundColor: theme.colors.onPrimary,
+      // backgroundColor: theme.colors.onPrimaryContainer,
       marginTop: spacing.md,
     },
   });

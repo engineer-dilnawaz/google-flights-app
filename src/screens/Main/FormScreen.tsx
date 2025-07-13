@@ -1,23 +1,44 @@
-import React, { useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { RECENT_PLACES, SUGGESTED_PLACES } from "~/constants/DATA";
 import { radius, spacing } from "~/constants/design";
-import { Icon } from "~/src/components";
+import { FullScreenLoader, Icon } from "~/src/components";
 import ToFrom from "~/src/components/collections/ToFrom";
 import Travllers from "~/src/components/collections/Travllers";
 import ScreenWrapper from "~/src/components/ui/ScreenWrapper";
+import { useSuggestedPlaces } from "~/src/hooks/api/useSuggestedPlaces";
 import { useMainNavigation } from "~/src/hooks/main/useMainNavigation";
 import { useMainRoute } from "~/src/hooks/main/useMainRoute";
 import { usePlacesStore } from "~/src/store";
+import { useSuggestedPlacesStore } from "~/src/store/searchedPlacesStore";
+import { PlaceItem } from "~/src/types/place";
 import { HPX } from "~/src/utils";
 
 const currentLocation = {
-  code: "KHI",
-  city: "Karachi",
-  country: "Pakistan",
-  airport: "Jinnah International Airport",
+  presentation: {
+    title: "Karachi",
+    suggestionTitle: "Jinnah International Airport (KHI)",
+    subtitle: "Pakistan",
+  },
+  navigation: {
+    entityId: "123456",
+    entityType: "AIRPORT",
+    localizedName: "Karachi",
+    relevantFlightParams: {
+      skyId: "KHI",
+      entityId: "123456",
+      flightPlaceType: "AIRPORT",
+      localizedName: "Karachi",
+    },
+    relevantHotelParams: {
+      entityId: "123456",
+      entityType: "CITY",
+      localizedName: "Karachi",
+    },
+  },
+  skyId: "KHI",
+  entityId: "123456",
 };
 
 const TRAVELLERS = "Travellers";
@@ -29,16 +50,28 @@ const FormScreen = () => {
   const route = useMainRoute<"form">();
   const [search, setSearch] = useState(route.params.selected ?? "");
   const { setFrom, setTo } = usePlacesStore();
+  const { suggestedPlaces, recentSearches, setRecentSearches } =
+    useSuggestedPlacesStore();
+  const { loading, fetchPlaces } = useSuggestedPlaces();
+
+  useEffect(() => {
+    if (route.params.type === "TO") {
+      fetchPlaces("usa");
+    } else {
+      fetchPlaces("germany");
+    }
+  }, []);
 
   const handleGoBack = () => {
     navigation.goBack();
   };
 
-  const handleSelect = (item: (typeof SUGGESTED_PLACES)[0]) => {
+  const handleSelect = (item: PlaceItem) => {
+    setRecentSearches(item);
     if (route.params.type === "FROM") {
-      setFrom(item.city);
+      setFrom(item.presentation.title);
     } else if (route.params.type === "TO") {
-      setTo(item.city);
+      setTo(item.presentation.title);
     }
     navigation.goBack();
   };
@@ -47,15 +80,38 @@ const FormScreen = () => {
     navigation.goBack();
   };
 
-  const filteredSuggestions = [...RECENT_PLACES, ...SUGGESTED_PLACES].filter(
-    (item) =>
-      `${item.city} ${item.code} ${item.airport}`
-        .toLowerCase()
-        .includes(search.toLowerCase())
-  );
+  const filteredSuggestions = suggestedPlaces.filter((item) => {
+    const content = `${item.presentation.title} ${item.presentation.suggestionTitle} ${item.presentation.subtitle}`;
+    return content.toLowerCase().includes(search.toLowerCase());
+  });
 
   const isTravellers =
     route?.params?.title.toLocaleLowerCase() === TRAVELLERS.toLocaleLowerCase();
+
+  let content = (
+    <Fragment>
+      {isTravellers ? (
+        <Travllers onDone={handleOnTravellersDone} />
+      ) : (
+        <ToFrom
+          searchedValue={search}
+          setSearchedValue={setSearch}
+          currentLocationList={[currentLocation]}
+          recentPlacesList={recentSearches}
+          suggestedPlacesList={filteredSuggestions}
+          handleSelect={handleSelect}
+        />
+      )}
+    </Fragment>
+  );
+
+  if (loading) {
+    content = (
+      <View style={styles.loaderContainer}>
+        <FullScreenLoader />
+      </View>
+    );
+  }
 
   return (
     <ScreenWrapper style={styles.container}>
@@ -70,19 +126,7 @@ const FormScreen = () => {
         </Pressable>
         <Text variant="titleMedium">{route?.params?.title}</Text>
       </View>
-
-      {isTravellers ? (
-        <Travllers onDone={handleOnTravellersDone} />
-      ) : (
-        <ToFrom
-          searchedValue={search}
-          setSearchedValue={setSearch}
-          currentLocationList={[currentLocation]}
-          recentPlacesList={RECENT_PLACES}
-          suggestedPlacesList={filteredSuggestions}
-          handleSelect={handleSelect}
-        />
-      )}
+      {content}
     </ScreenWrapper>
   );
 };
@@ -95,6 +139,11 @@ const useStyles = () => {
   return StyleSheet.create({
     container: {
       paddingHorizontal: spacing.md,
+    },
+    loaderContainer: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
     },
     headerContainer: {
       height: HPX(40),

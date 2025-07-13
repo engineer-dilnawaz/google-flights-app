@@ -15,7 +15,9 @@ import {
 } from "react-native-paper-dates";
 
 import { radius, spacing } from "~/constants/design";
+import { searchFlightResponse } from "~/mock/search-flight";
 import { Icon } from "~/src/components";
+import FlightsList from "~/src/components/collections/FlightsList";
 import CityInput from "~/src/components/ui/CityInput";
 import DateInput from "~/src/components/ui/DateInput";
 import IconText from "~/src/components/ui/IconText";
@@ -29,7 +31,7 @@ registerTranslation("en", en);
 const segmentButtons = [
   { value: "return", label: "Return" },
   { value: "one-way", label: "One way" },
-  { value: "multi-city", label: "Multi-city" },
+  // { value: "multi-city", label: "Multi-city" },
 ];
 
 const HomeScreen = () => {
@@ -65,17 +67,7 @@ const HomeScreen = () => {
     }
   };
 
-  const handleOnSearchPress = () => {
-    console.log(
-      from,
-      to,
-      departureDate,
-      childrenAges,
-      adults,
-      cabinClass,
-      directFlights
-    );
-  };
+  const handleOnSearchPress = async () => {};
 
   const infantsCount = childrenAges.filter((age) => age === "<1").length;
   const childrenCount = childrenAges.filter((age) => age !== "<1").length;
@@ -144,7 +136,7 @@ const HomeScreen = () => {
               value={departureDate}
               onPress={() => setPickerOpen(true)}
             />
-          ) : tripType === "return" ? (
+          ) : (
             <View style={styles.dateRow}>
               <View style={styles.dateInput}>
                 <DateInput
@@ -163,7 +155,7 @@ const HomeScreen = () => {
                 />
               </View>
             </View>
-          ) : null}
+          )}
 
           <TouchableRipple
             onPress={() => {
@@ -217,6 +209,13 @@ const HomeScreen = () => {
               }
             />
           </Pressable>
+        </View>
+
+        <View style={styles.dataContainer}>
+          <FlightsList
+            itineraries={searchFlightResponse.data.itineraries}
+            carriers={searchFlightResponse.data.filterStats.carriers}
+          />
         </View>
 
         {pickerOpen && (
@@ -296,6 +295,11 @@ const useStyles = () => {
       position: "absolute",
       right: 0,
       bottom: -20,
+      zIndex: 99,
+    },
+    dataContainer: {
+      flex: 1,
+      marginTop: spacing.xl,
     },
   });
 };
