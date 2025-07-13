@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import React, { Fragment, useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import {
@@ -15,7 +16,8 @@ import {
 } from "react-native-paper-dates";
 
 import { radius, spacing } from "~/constants/design";
-import { searchFlightResponse } from "~/mock/search-flight";
+import { FLIGHTS_SORT_BY } from "~/constants/SORT_BY";
+import { getConfigResponse } from "~/mock/get-config-response";
 import { Icon } from "~/src/components";
 import FlightsList from "~/src/components/collections/FlightsList";
 import CityInput from "~/src/components/ui/CityInput";
@@ -24,6 +26,7 @@ import IconText from "~/src/components/ui/IconText";
 import ScreenWrapper from "~/src/components/ui/ScreenWrapper";
 import { useMainNavigation } from "~/src/hooks/main/useMainNavigation";
 import { usePlacesStore } from "~/src/store";
+import { useFlightSearchStore } from "~/src/store/useFlightSearchStore";
 import { HPX, WPX } from "~/src/utils";
 
 registerTranslation("en", en);
@@ -56,7 +59,11 @@ const HomeScreen = () => {
     cabinClass,
     directFlights,
     setDirectFlights,
+    origin,
+    destination,
   } = usePlacesStore();
+
+  const { searchFlights } = useFlightSearchStore();
 
   const onDateConfirm = (params: any) => {
     setPickerOpen(false);
@@ -67,7 +74,30 @@ const HomeScreen = () => {
     }
   };
 
-  const handleOnSearchPress = async () => {};
+  const handleOnSearchPress = async () => {
+    const configCountry = getConfigResponse.data.filter(
+      (data) => data.country === "United States"
+    )[0];
+    if (origin && destination) {
+      const searchFlightParams = {
+        originSkyId: origin?.skyId,
+        destinationSkyId: destination?.skyId,
+        originEntityId: origin?.entityId,
+        destinationEntityId: destination?.entityId,
+        cabinClass: cabinClass,
+        adults: adults,
+        childrens: infantsCount,
+        infants: infantsCount,
+        sortBy: FLIGHTS_SORT_BY.BEST.toLowerCase(),
+        currency: configCountry.currency,
+        market: configCountry.market,
+        countryCode: configCountry.countryCode,
+        date: format(departureDate!, "yyyy-MM-dd"),
+      };
+
+      await searchFlights(searchFlightParams);
+    }
+  };
 
   const infantsCount = childrenAges.filter((age) => age === "<1").length;
   const childrenCount = childrenAges.filter((age) => age !== "<1").length;
@@ -212,10 +242,7 @@ const HomeScreen = () => {
         </View>
 
         <View style={styles.dataContainer}>
-          <FlightsList
-            itineraries={searchFlightResponse.data.itineraries}
-            carriers={searchFlightResponse.data.filterStats.carriers}
-          />
+          <FlightsList />
         </View>
 
         {pickerOpen && (

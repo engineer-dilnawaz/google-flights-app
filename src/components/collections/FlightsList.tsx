@@ -2,19 +2,25 @@ import React from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { Avatar, Card, Divider, Text } from "react-native-paper";
 import { spacing } from "~/constants/design";
+import { useFlightSearchStore } from "~/src/store/useFlightSearchStore";
 import {
-  FlightCarrier,
   FlightItinerary,
   FlightMarketingCarrier,
 } from "~/src/types/searched-flights-response"; // adjust path as needed
 import { HPX } from "~/src/utils";
+import ActivityIndicator from "../ui/ActivityIndicator";
 
-type FlightsListProps = {
-  itineraries: FlightItinerary[];
-  carriers: FlightCarrier[]; // from filterStats.carriers
-};
+const FlightsList = () => {
+  const { data, loading, error } = useFlightSearchStore();
 
-const FlightsList = ({ itineraries, carriers }: FlightsListProps) => {
+  console.log(data);
+
+  if (loading) return <ActivityIndicator text="Fetching Flights..." />;
+  if (error)
+    return <Text variant="labelSmall">{JSON.stringify(error, null, 2)}</Text>;
+
+  const itineraries = data?.data?.itineraries ?? [];
+
   const renderItem = ({ item }: { item: FlightItinerary }) => {
     const leg = item.legs[0];
     const marketingCarrier: FlightMarketingCarrier | undefined =

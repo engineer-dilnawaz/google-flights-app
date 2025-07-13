@@ -1,40 +1,24 @@
+import { SearchFlightsResponse } from "../types/searched-flights-response";
 import apiClient from "./apiClient";
 
-export const searchPlaces = async (query: string) => {
-  const response = await apiClient.get("/flights/auto-complete", {
-    params: { query },
-  });
-  return response.data.Places;
-};
-
-export const createSession = async (payload: {
-  originPlace: string;
-  destinationPlace: string;
-  outboundDate: string;
-  adults: number;
-  country: string;
+export const searchFlightsService = async (params: {
+  originSkyId: string;
+  destinationSkyId: string;
+  originEntityId?: string;
+  destinationEntityId?: string;
+  cabinClass: string;
+  adults: string | number;
+  sortBy?: string;
   currency: string;
-  locale: string;
-  inboundDate?: string;
-}) => {
-  const response = await apiClient.post("/flights/create-session", payload);
-  return response.data; // Should contain session key
-};
-
-export const pollSessionResults = async (sessionKey: string) => {
-  const response = await apiClient.get(`/flights/poll-session/${sessionKey}`);
-  return response.data; // Contains flight results
-};
-
-export const getFlightDetails = async (params: {
-  origin: string;
-  destination: string;
-  departDate: string;
-  returnDate?: string;
-  adults: number;
-}) => {
-  const response = await apiClient.get("/flights/search-roundtrip", {
-    params,
-  });
+  market: string;
+  countryCode: string;
+  date: string;
+}): Promise<SearchFlightsResponse> => {
+  const response = await apiClient.get<SearchFlightsResponse>(
+    "/api/v2/flights/searchFlights",
+    {
+      params,
+    }
+  );
   return response.data;
 };

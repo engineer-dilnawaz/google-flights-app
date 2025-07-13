@@ -49,7 +49,7 @@ const FormScreen = () => {
   const navigation = useMainNavigation();
   const route = useMainRoute<"form">();
   const [search, setSearch] = useState(route.params.selected ?? "");
-  const { setFrom, setTo } = usePlacesStore();
+  const { setFrom, setTo, setOrigin, setDestination } = usePlacesStore();
   const { suggestedPlaces, recentSearches, setRecentSearches } =
     useSuggestedPlacesStore();
   const { loading, fetchPlaces } = useSuggestedPlaces();
@@ -70,8 +70,10 @@ const FormScreen = () => {
     setRecentSearches(item);
     if (route.params.type === "FROM") {
       setFrom(item.presentation.title);
+      setOrigin(item);
     } else if (route.params.type === "TO") {
       setTo(item.presentation.title);
+      setDestination(item);
     }
     navigation.goBack();
   };
@@ -105,7 +107,7 @@ const FormScreen = () => {
     </Fragment>
   );
 
-  if (loading) {
+  if (loading && !isTravellers) {
     content = (
       <View style={styles.loaderContainer}>
         <FullScreenLoader />

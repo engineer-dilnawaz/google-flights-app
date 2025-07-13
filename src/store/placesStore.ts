@@ -1,5 +1,6 @@
 // zustand store (usePlacesStore.ts)
 import { create } from "zustand";
+import { PlaceItem } from "../types/place";
 
 export type PlacesState = {
   from: string;
@@ -16,6 +17,8 @@ export type PlacesState = {
   children: number;
   childrenAges: string[];
   directFlights: boolean;
+  origin: undefined | PlaceItem;
+  destination: undefined | PlaceItem;
 
   // Actions
   setFrom: (value: string) => void;
@@ -30,6 +33,8 @@ export type PlacesState = {
   setAdults: (count: number) => void;
   setChildren: (count: number) => void;
   setChildrenAges: (ages: string[]) => void;
+  setOrigin: (origin: PlaceItem) => void;
+  setDestination: (origin: PlaceItem) => void;
 };
 
 export const usePlacesStore = create<PlacesState>((set, get) => ({
@@ -46,12 +51,15 @@ export const usePlacesStore = create<PlacesState>((set, get) => ({
   children: 0,
   childrenAges: [],
   directFlights: false,
+  origin: undefined,
+  destination: undefined,
 
   setFrom: (value) => set({ from: value }),
   setTo: (value) => set({ to: value }),
   swapPlaces: () => {
-    const { from, to } = get();
-    set({ from: to, to: from });
+    const { from, to, origin, destination } = get();
+
+    set({ from: to, to: from, origin: destination, destination: origin });
   },
   setDepartureDate: (date) => set({ departureDate: date }),
   setRange: (startDate, endDate) => set({ range: { startDate, endDate } }),
@@ -74,4 +82,6 @@ export const usePlacesStore = create<PlacesState>((set, get) => ({
   },
   setChildrenAges: (ages) => set({ childrenAges: ages }),
   setDirectFlights: (value: boolean) => set({ directFlights: value }),
+  setOrigin: (value) => set({ origin: value }),
+  setDestination: (value) => set({ destination: value }),
 }));

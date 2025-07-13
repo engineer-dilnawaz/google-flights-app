@@ -8,10 +8,10 @@ import { HPX } from "~/src/utils";
 import CounterButtons from "../ui/CounterButtons";
 
 const cabinOptions = [
-  { label: "Economy", value: "Economy" },
-  { label: "Premium Economy", value: "Premium Economy" },
-  { label: "Business", value: "Business" },
-  { label: "First", value: "First" },
+  { label: "Economy", value: "economy" },
+  { label: "Premium Economy", value: "premium_economy" },
+  { label: "Business", value: "business" },
+  { label: "First", value: "first" },
 ];
 
 const childAgeOptions = [
