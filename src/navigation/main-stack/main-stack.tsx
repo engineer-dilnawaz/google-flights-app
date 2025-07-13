@@ -1,4 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import FormScreen from "~/src/screens/Main/FormScreen";
 import ResultsScreen from "~/src/screens/Main/ResultsScreen";
 import BottomTab from "../bottom-tab/bottom-tab";
 
@@ -10,6 +11,10 @@ export type RootStackParamList = {
       to: string;
       departureDate: string;
     };
+  };
+  form: {
+    title: string;
+    type: "FROM" | "TO" | "TRAVELLERS";
   };
 };
 
@@ -24,6 +29,11 @@ const MainStack = () => {
     >
       <Stack.Screen name="home" component={BottomTab} />
       <Stack.Screen name="result" component={ResultsScreen} />
+      <Stack.Screen
+        name="form"
+        component={FormScreen}
+        options={{ presentation: "fullScreenModal" }}
+      />
     </Stack.Navigator>
   );
 };
