@@ -3,6 +3,8 @@ import { Pressable, StyleSheet, View } from "react-native";
 import {
   Divider,
   SegmentedButtons,
+  Switch,
+  Text,
   TouchableRipple,
   useTheme,
 } from "react-native-paper";
@@ -20,7 +22,7 @@ import IconText from "~/src/components/ui/IconText";
 import ScreenWrapper from "~/src/components/ui/ScreenWrapper";
 import { useMainNavigation } from "~/src/hooks/main/useMainNavigation";
 import { usePlacesStore } from "~/src/store";
-import { HPX } from "~/src/utils";
+import { HPX, WPX } from "~/src/utils";
 
 registerTranslation("en", en);
 
@@ -47,6 +49,11 @@ const HomeScreen = () => {
     setDepartureDate,
     setRange,
     resetDates,
+    childrenAges,
+    adults,
+    cabinClass,
+    directFlights,
+    setDirectFlights,
   } = usePlacesStore();
 
   const onDateConfirm = (params: any) => {
@@ -57,6 +64,28 @@ const HomeScreen = () => {
       setRange(params.startDate, params.endDate);
     }
   };
+
+  const handleOnSearchPress = () => {
+    console.log(
+      from,
+      to,
+      departureDate,
+      childrenAges,
+      adults,
+      cabinClass,
+      directFlights
+    );
+  };
+
+  const infantsCount = childrenAges.filter((age) => age === "<1").length;
+  const childrenCount = childrenAges.filter((age) => age !== "<1").length;
+
+  const hasValidDates =
+    (tripType === "one-way" && !!departureDate) ||
+    (tripType === "return" && !!range.startDate && !!range.endDate);
+
+  const isSearchDisabled =
+    !from || !to || !hasValidDates || adults + childrenCount < 1 || !cabinClass;
 
   return (
     <Fragment>
@@ -147,14 +176,47 @@ const HomeScreen = () => {
             style={styles.travallersContainer}
           >
             <Fragment>
-              <IconText label="1" icon="human-male" />
-              <IconText label="1" icon="human-child" />
-              <IconText label="1" icon="human-female-girl" />
-              <IconText label="Business" icon="chevron-down" />
+              <IconText label={adults.toString()} icon="human-male" />
+              <IconText label={childrenCount.toString()} icon="human-child" />
+              <IconText
+                label={infantsCount.toString()}
+                icon="human-female-girl"
+              />
+              <IconText label={cabinClass} icon="chevron-down" />
             </Fragment>
           </TouchableRipple>
 
+          <Pressable
+            onPress={() => setDirectFlights(!directFlights)}
+            style={styles.directFlightsContainer}
+          >
+            <Switch value={directFlights} onValueChange={setDirectFlights} />
+            <Text variant="bodyMedium">Direct Flights Only</Text>
+          </Pressable>
           <Divider style={[styles.divider, { marginTop: 0 }]} />
+          <Pressable
+            onPress={handleOnSearchPress}
+            style={[
+              styles.searchBtn,
+              {
+                backgroundColor: isSearchDisabled
+                  ? theme.colors.surfaceDisabled
+                  : theme.colors.primary,
+              },
+            ]}
+            disabled={isSearchDisabled}
+          >
+            <Icon
+              type="Feather"
+              name="search"
+              size={HPX(30)}
+              color={
+                isSearchDisabled
+                  ? theme.colors.onSurfaceDisabled
+                  : theme.colors.onPrimary
+              }
+            />
+          </Pressable>
         </View>
 
         {pickerOpen && (
@@ -218,6 +280,22 @@ const useStyles = () => {
       flexDirection: "row",
       alignItems: "center",
       gap: spacing.sm,
+    },
+    directFlightsContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: spacing.md,
+    },
+    searchBtn: {
+      width: WPX(50),
+      height: HPX(50),
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: radius.full,
+
+      position: "absolute",
+      right: 0,
+      bottom: -20,
     },
   });
 };

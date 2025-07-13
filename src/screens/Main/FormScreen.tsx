@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
-import { Text, TextInput, useTheme } from "react-native-paper";
+import { Text, useTheme } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { RECENT_PLACES, SUGGESTED_PLACES } from "~/constants/DATA";
 import { radius, spacing } from "~/constants/design";
 import { Icon } from "~/src/components";
+import ToFrom from "~/src/components/collections/ToFrom";
+import Travllers from "~/src/components/collections/Travllers";
 import ScreenWrapper from "~/src/components/ui/ScreenWrapper";
-import SectionList from "~/src/components/ui/SectionList";
 import { useMainNavigation } from "~/src/hooks/main/useMainNavigation";
 import { useMainRoute } from "~/src/hooks/main/useMainRoute";
 import { usePlacesStore } from "~/src/store";
@@ -18,6 +19,8 @@ const currentLocation = {
   country: "Pakistan",
   airport: "Jinnah International Airport",
 };
+
+const TRAVELLERS = "Travellers";
 
 const FormScreen = () => {
   const styles = useStyles();
@@ -37,7 +40,11 @@ const FormScreen = () => {
     } else if (route.params.type === "TO") {
       setTo(item.city);
     }
-    navigation.goBack(); // or use navigation.navigate with params
+    navigation.goBack();
+  };
+
+  const handleOnTravellersDone = () => {
+    navigation.goBack();
   };
 
   const filteredSuggestions = [...RECENT_PLACES, ...SUGGESTED_PLACES].filter(
@@ -46,6 +53,9 @@ const FormScreen = () => {
         .toLowerCase()
         .includes(search.toLowerCase())
   );
+
+  const isTravellers =
+    route?.params?.title.toLocaleLowerCase() === TRAVELLERS.toLocaleLowerCase();
 
   return (
     <ScreenWrapper style={styles.container}>
@@ -61,45 +71,18 @@ const FormScreen = () => {
         <Text variant="titleMedium">{route?.params?.title}</Text>
       </View>
 
-      <TextInput
-        mode="outlined"
-        placeholder="Search for city or airport"
-        value={search}
-        onChangeText={setSearch}
-        style={styles.searchInput}
-        clearButtonMode="while-editing"
-        left={
-          <TextInput.Icon icon="map-marker" color={theme.colors.onBackground} />
-        }
-      />
-
-      <View style={{ paddingBottom: spacing.xl }}>
-        {/* Current location */}
-        <SectionList
-          label="Current Location"
-          list={[currentLocation]}
-          onPress={handleSelect}
-          icon="history"
-          showList={!search}
+      {isTravellers ? (
+        <Travllers onDone={handleOnTravellersDone} />
+      ) : (
+        <ToFrom
+          searchedValue={search}
+          setSearchedValue={setSearch}
+          currentLocationList={[currentLocation]}
+          recentPlacesList={RECENT_PLACES}
+          suggestedPlacesList={filteredSuggestions}
+          handleSelect={handleSelect}
         />
-
-        {/* Recent Places */}
-        <SectionList
-          label="Recent Searches"
-          list={filteredSuggestions}
-          onPress={handleSelect}
-          icon="history"
-          showList={!search && RECENT_PLACES.length > 0}
-        />
-
-        {/* Suggested Places */}
-        <SectionList
-          label="Suggested Places"
-          list={filteredSuggestions}
-          onPress={handleSelect}
-          icon="airplane"
-        />
-      </View>
+      )}
     </ScreenWrapper>
   );
 };
@@ -127,6 +110,7 @@ const useStyles = () => {
     },
     listsContainer: {
       flex: 1,
+      paddingBottom: spacing.xl,
     },
   });
 };

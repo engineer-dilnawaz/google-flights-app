@@ -33,7 +33,7 @@ const MainStack = () => {
       <Stack.Screen
         name="form"
         component={FormScreen}
-        options={{ presentation: "fullScreenModal" }}
+        options={{ animation: "slide_from_bottom" }}
       />
     </Stack.Navigator>
   );
