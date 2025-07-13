@@ -19,6 +19,7 @@ import { radius, spacing } from "~/constants/design";
 import { FLIGHTS_SORT_BY } from "~/constants/SORT_BY";
 import { getConfigResponse } from "~/mock/get-config-response";
 import { Icon } from "~/src/components";
+import { cabinOptions } from "~/src/components/collections";
 import FlightsList from "~/src/components/collections/FlightsList";
 import CityInput from "~/src/components/ui/CityInput";
 import DateInput from "~/src/components/ui/DateInput";
@@ -204,7 +205,12 @@ const HomeScreen = () => {
                 label={infantsCount.toString()}
                 icon="human-female-girl"
               />
-              <IconText label={cabinClass} icon="chevron-down" />
+              <IconText
+                label={
+                  cabinOptions.filter((cb) => cb.value === cabinClass)[0].label
+                }
+                icon="chevron-down"
+              />
             </Fragment>
           </TouchableRipple>
 

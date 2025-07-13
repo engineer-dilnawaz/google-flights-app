@@ -7,7 +7,7 @@ import { usePlacesStore } from "~/src/store";
 import { HPX } from "~/src/utils";
 import CounterButtons from "../ui/CounterButtons";
 
-const cabinOptions = [
+export const cabinOptions = [
   { label: "Economy", value: "economy" },
   { label: "Premium Economy", value: "premium_economy" },
   { label: "Business", value: "business" },
@@ -113,7 +113,10 @@ const Travllers = ({ onDone }: TravllersProps) => {
           <Text variant="titleMedium">Cabin class</Text>
           <Dropdown
             mode={"outlined"}
-            value={state.cabinClass}
+            value={
+              cabinOptions.filter((cb) => cb.value === state.cabinClass)[0]
+                .label
+            }
             onSelect={(value) =>
               value && dispatch({ type: "SET_CABIN_CLASS", payload: value })
             }
