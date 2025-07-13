@@ -1,50 +1,177 @@
-# Welcome to your Expo app 👋
+# Google Flights App (React Native + Expo)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A modern, full-featured flight search and booking app inspired by Google Flights, built with React Native, Expo, and React Native Paper. This app demonstrates best practices in cross-platform mobile development, state management, theming, and UI/UX design.
 
-## Get started
+---
 
-1. Install dependencies
+## ✈️ Features
 
+- **Flight Search:**
+  - Search for flights between cities/airports with flexible date selection (one-way or return).
+  - Filter by direct flights, cabin class, and number of travelers (adults, children, infants).
+  - View a list of available flights with details, stops, and prices.
+- **Authentication:**
+  - Sign up and log in with email/phone and password (local storage-based for demo).
+  - Delete account and log out functionality.
+  - Privacy policy and terms acceptance during sign-up.
+- **User Profile:**
+  - View and edit user information.
+  - Switch between light and dark mode (persistent theme preference).
+  - Change language (UI only, i18n placeholder).
+- **Saved/Favourite Flights:**
+  - Save and view favourite flights (UI placeholder).
+- **Modern UI/UX:**
+  - Built with React Native Paper for a consistent Material Design look.
+  - Smooth navigation with bottom tabs and stack navigation.
+  - Lottie animations for splash/loading screens.
+  - Responsive layouts and custom components.
+- **Developer Experience:**
+  - Modular, scalable codebase with hooks, stores, and reusable UI components.
+  - TypeScript for type safety.
+  - ESLint for code quality.
+
+---
+
+## 📦 Project Structure
+
+```
+/ (root)
+├── assets/           # Images, icons, fonts, Lottie animations
+├── constants/        # Design tokens, static data
+├── mock/             # Mock API responses for development
+├── scripts/          # Utility scripts (e.g., reset-project)
+├── src/
+│   ├── App.tsx       # App entry point
+│   ├── components/   # UI and collection components
+│   ├── hooks/        # Custom React hooks
+│   ├── navigation/   # Navigation stacks and tabs
+│   ├── screens/      # App screens (Auth, Main, Others)
+│   ├── services/     # API clients and service logic
+│   ├── store/        # Zustand stores and context providers
+│   ├── types/        # TypeScript type definitions
+│   └── utils/        # Utility functions
+├── package.json      # Project metadata and dependencies
+└── README.md         # This file
+```
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (v18+ recommended)
+- [Yarn](https://yarnpkg.com/) or npm
+- [Expo CLI](https://docs.expo.dev/get-started/installation/)
+
+### Installation
+
+1. **Clone the repository:**
    ```bash
+   git clone <repo-url>
+   cd google-flights-app
+   ```
+2. **Install dependencies:**
+   ```bash
+   yarn install
+   # or
    npm install
    ```
-
-2. Start the app
-
+3. **Start the Expo development server:**
    ```bash
+   yarn start
+   # or
+   npm start
+   # or
    npx expo start
    ```
+4. **Run on your device/emulator:**
+   - Press `i` for iOS simulator
+   - Press `a` for Android emulator
+   - Scan the QR code with [Expo Go](https://expo.dev/go) on your device
 
-In the output, you'll find options to open the app in a
+### Resetting the Project
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+To reset the project to a clean state:
 
 ```bash
 npm run reset-project
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-## Learn more
+## 🛠️ Main Libraries & Tools
 
-To learn more about developing your project with Expo, look at the following resources:
+- **[Expo](https://expo.dev/):** App scaffolding, build, and development tools
+- **[React Native](https://reactnative.dev/):** Core framework
+- **[React Native Paper](https://callstack.github.io/react-native-paper/):** Material Design UI components and theming
+- **[React Navigation](https://reactnavigation.org/):** Navigation (stack, tab)
+- **[Zustand](https://docs.pmnd.rs/zustand/getting-started/introduction):** State management (flight search, places, auth, etc.)
+- **[Lottie React Native](https://github.com/lottie-react-native/lottie-react-native):** Animations (splash, loading)
+- **[Axios](https://axios-http.com/):** HTTP client for API requests
+- **[Date-fns](https://date-fns.org/):** Date formatting and manipulation
+- **[@gorhom/bottom-sheet](https://github.com/gorhom/react-native-bottom-sheet):** Bottom sheet UI
+- **[AsyncStorage](https://react-native-async-storage.github.io/async-storage/):** Local storage for user data
+- **[TypeScript](https://www.typescriptlang.org/):** Type safety
+- **[ESLint](https://eslint.org/):** Linting and code quality
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+---
 
-## Join the community
+## 🎨 Theming & UI
 
-Join our community of developers creating universal apps.
+- **Material Design:** All screens and components use React Native Paper for a modern, accessible look.
+- **Custom Theme Support:** Light and dark mode toggle, with persistent user preference.
+- **Reusable Components:** Custom inputs, buttons, loaders, snackbars, bottom sheets, and more.
+- **Responsive Design:** Utility functions for scaling and spacing.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+---
+
+## 🔄 State Management
+
+- **Zustand:** Used for flight search state, places selection, and suggested places.
+- **React Context:** Used for authentication and theme management.
+- **Persistent Storage:** User and theme preferences are saved using AsyncStorage.
+
+---
+
+## 🖼️ Animations
+
+- **Lottie Animations:**
+  - Splash screen and loading indicators use Lottie for smooth, engaging animations.
+  - Easily extendable for more animated UI elements.
+
+---
+
+## 🔐 Authentication
+
+- **Local Auth:**
+  - Sign up and log in with email/phone and password (credentials stored in AsyncStorage for demo purposes).
+  - Delete account and log out.
+  - Privacy policy and terms acceptance required for sign-up.
+- **Social Login (UI only):**
+  - Facebook and Google login buttons are present for demonstration, but not connected to real OAuth providers.
+
+---
+
+## 📚 Development Notes
+
+- **Mock Data:**
+  - The app uses mock API responses for flight search and airport data. Integrate with a real backend for production use.
+- **TypeScript:**
+  - All business logic and components are strongly typed.
+- **Code Quality:**
+  - ESLint and Prettier are recommended for consistent code style.
+- **Testing:**
+  - Add your own tests as needed (not included by default).
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please open issues or submit pull requests for improvements, bug fixes, or new features.
+
+---
+
+## 📄 License
+
+This project is for educational/demo purposes. Please check the repository for license details.
