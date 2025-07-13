@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
-import { List, Text, TextInput, useTheme } from "react-native-paper";
+import { Text, TextInput, useTheme } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { RECENT_PLACES, SUGGESTED_PLACES } from "~/constants/DATA";
 import { radius, spacing } from "~/constants/design";
 import { Icon } from "~/src/components";
 import ScreenWrapper from "~/src/components/ui/ScreenWrapper";
+import SectionList from "~/src/components/ui/SectionList";
 import { useMainNavigation } from "~/src/hooks/main/useMainNavigation";
 import { useMainRoute } from "~/src/hooks/main/useMainRoute";
 import { usePlacesStore } from "~/src/store";
@@ -23,7 +24,7 @@ const FormScreen = () => {
   const theme = useTheme();
   const navigation = useMainNavigation();
   const route = useMainRoute<"form">();
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(route.params.selected ?? "");
   const { setFrom, setTo } = usePlacesStore();
 
   const handleGoBack = () => {
@@ -39,10 +40,11 @@ const FormScreen = () => {
     navigation.goBack(); // or use navigation.navigate with params
   };
 
-  const filteredSuggestions = SUGGESTED_PLACES.filter((item) =>
-    `${item.city} ${item.code} ${item.airport}`
-      .toLowerCase()
-      .includes(search.toLowerCase())
+  const filteredSuggestions = [...RECENT_PLACES, ...SUGGESTED_PLACES].filter(
+    (item) =>
+      `${item.city} ${item.code} ${item.airport}`
+        .toLowerCase()
+        .includes(search.toLowerCase())
   );
 
   return (
@@ -73,48 +75,30 @@ const FormScreen = () => {
 
       <View style={{ paddingBottom: spacing.xl }}>
         {/* Current location */}
-        {!search && (
-          <List.Section>
-            <List.Subheader>Current Location</List.Subheader>
-            <List.Item
-              title={`${currentLocation.city} (${currentLocation.code})`}
-              description={currentLocation.airport}
-              left={() => <List.Icon icon="crosshairs-gps" />}
-              onPress={() => handleSelect(currentLocation)}
-            />
-          </List.Section>
-        )}
+        <SectionList
+          label="Current Location"
+          list={[currentLocation]}
+          onPress={handleSelect}
+          icon="history"
+          showList={!search}
+        />
+
         {/* Recent Places */}
-        {!search && RECENT_PLACES.length > 0 && (
-          <List.Section>
-            <List.Subheader>Recent Places</List.Subheader>
-            {RECENT_PLACES.map((item) => (
-              <List.Item
-                key={item.code}
-                title={`${item.city} (${item.code})`}
-                description={item.airport}
-                left={() => <List.Icon icon="history" />}
-                onPress={() => handleSelect(item)}
-              />
-            ))}
-          </List.Section>
-        )}
+        <SectionList
+          label="Recent Searches"
+          list={filteredSuggestions}
+          onPress={handleSelect}
+          icon="history"
+          showList={!search && RECENT_PLACES.length > 0}
+        />
 
         {/* Suggested Places */}
-        {filteredSuggestions.length > 0 && (
-          <List.Section>
-            <List.Subheader>Suggested Places</List.Subheader>
-            {filteredSuggestions.map((item) => (
-              <List.Item
-                key={item.code}
-                title={`${item.city} (${item.code})`}
-                description={item.airport}
-                left={() => <List.Icon icon="airplane" />}
-                onPress={() => handleSelect(item)}
-              />
-            ))}
-          </List.Section>
-        )}
+        <SectionList
+          label="Suggested Places"
+          list={filteredSuggestions}
+          onPress={handleSelect}
+          icon="airplane"
+        />
       </View>
     </ScreenWrapper>
   );

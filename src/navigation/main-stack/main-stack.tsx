@@ -15,6 +15,7 @@ export type RootStackParamList = {
   form: {
     title: string;
     type: "FROM" | "TO" | "TRAVELLERS";
+    selected?: string;
   };
 };
 
